@@ -1,2 +1,2 @@
-# employee-directory
-Create employee directory using REACT
+# EmployyDirectory
+Create app using React JS
