@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React  from "react";
 import API from "../utils/API";
 
 class Container extends React.Component {
@@ -55,7 +55,7 @@ class Container extends React.Component {
         return (
           <tr key={index}>
             <td>
-              <img src={user.image} alt="user"></img>
+              <img src={employee.image} alt="employee"></img>
             </td>
             <td>{employee.first}</td>
             <td>{employee.last}</td>

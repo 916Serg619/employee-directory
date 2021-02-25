@@ -1,10 +1,10 @@
 import React from 'react';
-import UserContainer from './components/UserContainer'
-import JumboTron from './components/JumboTron';
+import Container from './components/container';
+import JumboTron from './components/jumbotron';
 function App() {
   return <>
   <JumboTron/>
-  <UserContainer/> 
+  <Container/> 
   </>
 }
 
