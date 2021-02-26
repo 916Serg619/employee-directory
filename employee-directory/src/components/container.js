@@ -1,7 +1,9 @@
 import React  from "react";
 import API from "../utils/API";
 
-class Container extends React.Component {
+
+
+class EmployeeContainer extends React.Component {
 
     //set state
     state = {
@@ -17,6 +19,7 @@ class Container extends React.Component {
     componentDidMount() {
         API.employeeList()
             .then(res => {
+              console.log(res)
                 const employeeArray = res.data.result.map(employee => {
                     return {
                         first: employee.name.first,
@@ -156,4 +159,4 @@ class Container extends React.Component {
   }
 }
 
-export default Container;
+export default EmployeeContainer;
