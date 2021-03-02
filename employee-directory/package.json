@@ -17,13 +17,12 @@
   "homepage": "https://916Serg619.github.io/employee-directory",
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -b main -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  
   "eslintConfig": {
     "extends": [
       "react-app",
