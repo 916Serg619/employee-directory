@@ -1,69 +1,68 @@
-import React  from "react";
+import React from "react";
+import "./styles.css";
 import API from "../utils/API";
 
-
-
+//set initial State
 class EmployeeContainer extends React.Component {
+  //set initial state
+  state = {
+    users: [],
+    search: "",
+    sortDirection: "",
+    col: ""
+  };
 
-    //set state
-    state = {
-        employees: [],
-        search: "",
-        direction: "",
-        col: ""
-    };
-
-    //send a get request to retrieve employees
-    //Map over response to create an Array for the employee objects
-    //SAdd Array with setState
-    componentDidMount() {
-        API.employeeList()
-            .then(res => {
-              console.log(res)
-                const employeeArray = res.data.result.map(employee => {
-                    return {
-                        first: employee.name.first,
-                        last: employee.name.last,
-                        email: employee.email,
-                        dob: employee.dob.date,
-                        image: employee.picture.medium
-                    };
-                });
-                this.setState({ employees: employeeArray });
-            })
-            .catch(err => console.log(err));
-    }
-
-    //update search state when the user types a character
-    updateSearch = i => {
-        this.setState({ search: i.target.value });
-    };
-
-    //filter list to display fisr or last letter that matches the character input
-    filterEmployees() {
-        const search = this.state.search.toLowerCase();
-        return this.state.employees.filter(employee => {
-            return (
-                employee.first.toLowerCase().includes(search) ||
-                employee.last.toLowerCase().includes(search)
-            );
+  //After the component mounts, send a get request to retrieve the employees.
+ 
+  componentDidMount() {
+    API.employeesList()
+      .then(res => {
+        //Map over the response to create an array of user objects.
+        const employeeArray = res.data.results.map(user => {
+          return {
+            first: user.name.first,
+            last: user.name.last,
+            email: user.email,
+            dob: user.dob.date,
+            image: user.picture.medium
+          };
         });
-    }
+         //Use setState to add the array to our us state.
+        this.setState({ users: employeeArray });
+      })
+      .catch(err => console.log(err));
+  }
 
-    //function to render a table of users
+  //This updates the search bar every time a character is typed.
+  handleSearchChange = e => {
+    this.setState({ search: e.target.value });
+  };
+
+  //This function filters list based on first/last letter
+  filteredEmployees() {
+    const search = this.state.search.toLowerCase();
+    return this.state.users.filter(user => {
+      return (
+        user.first.toLowerCase().includes(search) ||
+        user.last.toLowerCase().includes(search)
+      );
+    });
+  }
+
+  //Render Employees
   renderEmployees = () => {
-    return this.filterEmployees()
-      .sort(this.sortEmployees)
-      .map((employee, index) => {
+    return this.filteredEmployees()
+      .sort(this.sortUsers)
+      .map((user, index) => {
         return (
           <tr key={index}>
             <td>
-              <img src={employee.image} alt="employee"></img>
+              <img src={user.image} alt="user"></img>
             </td>
-            <td>{employee.first}</td>
-            <td>{employee.last}</td>
-            <td>{employee.email}</td>
-            <td>{new Date(employee.dob).toDateString()}</td>
+            <td>{user.first}</td>
+            <td>{user.last}</td>
+            <td>{user.email}</td>
+            <td>{new Date(user.dob).toDateString()}</td>
           </tr>
         );
       });
@@ -71,38 +70,37 @@ class EmployeeContainer extends React.Component {
 
   //depending on which column was clicked, add or remove the arrow
   //icon specifying the sort direction
-  getClassName = col => {
+  getHeaderClassName = col => {
     return this.state.col === col
-      ? `clickable ${this.state.direction}`
+      ? `clickable ${this.state.sortDirection}`
       : `clickable`;
   };
 
-  //depending on which column was clicked, set the sort direction to
-  //the opposite of what it was.
-  updateDirection = col => {
-    this.state.col === col && this.state.direction === "ascending"
-      ? this.setState({ direction: "descending", col: col })
-      : this.setState({ direction: "ascending", col: col });
+  //This function sorts each column that is clicked (ascending/descending) 
+  handleSortDirectionChange = col => {
+    this.state.col === col && this.state.sortDirection === "ascending"
+      ? this.setState({ sortDirection: "descending", col: col })
+      : this.setState({ sortDirection: "ascending", col: col });
   };
 
   //function to return 1 or -1 to sort function depending on sort direction
-  sortEmployees = (a, b) => {
+  sortUsers = (a, b) => {
     if (a[this.state.col] < b[this.state.col]) {
-      return this.state.direction === "ascending" ? -1 : 1;
+      return this.state.sortDirection === "ascending" ? -1 : 1;
     } else if (a[this.state.col] > b[this.state.col]) {
-      return this.state.direction === "ascending" ? 1 : -1;
+      return this.state.sortDirection === "ascending" ? 1 : -1;
     }
     return 0;
   };
 
-  //render the user container including search field
+  //Render Employee Container
   render() {
     return (
       <>
         <div className="input-group justify-content-center">
           <div className="input-group-prepend"></div>
           <input
-            onChange={this.updateSearch}
+            onChange={this.handleSearchChange}
             type="search"
             className="form-control m-3"
             placeholder="Search"
@@ -117,9 +115,9 @@ class EmployeeContainer extends React.Component {
                 <th scope="col">Image</th>
                 <th scope="col">
                   <span
-                    className={this.getClassName("first")}
+                    className={this.getHeaderClassName("first")}
                     onClick={() => {
-                      this.updateDirection("first");
+                      this.handleSortDirectionChange("first");
                     }}
                   >
                     First
@@ -127,24 +125,24 @@ class EmployeeContainer extends React.Component {
                 </th>
                 <th scope="col">
                   <span
-                    className={this.getClassName("last")}
-                    onClick={() => this.updateDirection("last")}
+                    className={this.getHeaderClassName("last")}
+                    onClick={() => this.handleSortDirectionChange("last")}
                   >
                     Last
                   </span>
                 </th>
                 <th scope="col">
                   <span
-                    className={this.getClassName("email")}
-                    onClick={() => this.updateDirection("email")}
+                    className={this.getHeaderClassName("email")}
+                    onClick={() => this.handleSortDirectionChange("email")}
                   >
                     Email
                   </span>
                 </th>
                 <th scope="col">
                   <span
-                    className={this.getClassName("dob")}
-                    onClick={() => this.updateDirection("dob")}
+                    className={this.getHeaderClassName("dob")}
+                    onClick={() => this.handleSortDirectionChange("dob")}
                   >
                     DOB
                   </span>

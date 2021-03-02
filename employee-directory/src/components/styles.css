@@ -1,0 +1,41 @@
+.jumbotron {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  background-color: rgb(8, 16, 31) !important;
+  color: white;
+}
+
+.col {
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.form-control {
+  max-width: 300px !important;
+}
+
+thead {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  background-color: #003366;
+  color: white;
+}
+
+.clickable {
+  cursor: pointer;
+  padding: 10px;
+}
+
+thead span.descending::after {
+  content: "⬇";
+  display: inline-block;
+  margin-left: 3px;
+}
+
+thead span.ascending::after {
+  content: "⬆";
+  display: inline-block;
+  margin-left: 3px;
+}
